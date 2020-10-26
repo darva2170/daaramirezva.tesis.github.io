@@ -1,0 +1,14 @@
+name: "my-website"
+output_dir: "."
+navbar:
+  title: "UNAL 2020-II"
+  left:
+    - text: "Contenido"
+      href: index.html
+    - text: "Acerca"
+      href: about.html
+
+output:
+  html_document:
+    theme: united
+    highlight: tango
