@@ -7,8 +7,11 @@ navbar:
       href: index.html
     - text: "Acerca"
       href: about.html
-
+    - text: "Contacto"
+      href: Contacto.html
 output:
   html_document:
     theme: united
     highlight: tango
+
+#rmarkdown::render_site(encoding="UTF-8")
