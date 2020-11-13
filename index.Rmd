@@ -29,14 +29,17 @@ library(ggplot2)
 library(knitr)
 ```
 
-Recordar que en caso de no tener alguna libería instalada, se debe usar el comando install.packages("Nombre_librería"), esto debe realizarse una única vez.
+NOTA: Recordar que en caso de no tener alguna libería instalada, se debe usar el comando _install.packages("Nombre_librería")_, esto debe realizarse una única vez.
+
+Con los paquetes de liberías necesarios ya cargados, procedemos a importar los datos del experimiento. Estos datos se pueden también crear de forma manual como vectores y al final concatenar todo en un respectivo dataframe. Sin importar el método de creación del dataframe, se debe asegurar que quede categorizado así, para ello se hacen ciertas comprobaciones.
+
 
 ```{r}
 datos_tension <- read_excel("Datos_tensión.xlsx")
 DT::datatable(datos_tension)
 ```
 
-En caso de que el data frame no haya considerado los respectivos factores como tal, es necesario hacer la transformación de las caterogrías. 
+En caso de que el dataframe no haya considerado los respectivos factores como tal, es necesario hacer la transformación de las categorías. 
 
 ```{r}
 datos_tension$Mat_Aporte<- as.factor(datos_tension$Mat_Aporte)
@@ -224,35 +227,38 @@ with(datos_tension2, {
  <br/><br/>
  Otra herramienta visual que nos permite analizar el experimiento son los diagramas de caja. En este tipo de gráficos podemos hacernos una idea de como es la varianza de los niveles de los tratamientos como la comparación entre ellos, también podemos ver los datos atípicos que presentó la experimentación.
 
-```{r Boxplot, echo=FALSE}
+```{r Boxplot, echo=TRUE}
 
-bp1<- ggplot(datos_tension2, aes(x=Electrodo, y=Esfuerzo)) + 
-      geom_boxplot(fill='#A4A4A4', color="black", width=0.5)+
-      labs(title="Diagrama de cajas por\nElectrodo no consumible",x="Electrodo no consumible", y = "Resistencia última \na la tracción (MPa)")+
-      scale_fill_grey() + theme_classic()
+bp1 <- ggplot(datos_tension2, aes(x=Electrodo, y=Esfuerzo)) + 
+  geom_boxplot(fill='#A4A4A4', color="black", width=0.5) +
+  labs(title="Diagrama de cajas por\nElectrodo no consumible",
+       x="Electrodo no consumible", 
+       y = "Resistencia última \na la tracción (MPa)")+
+  scale_fill_grey() + 
+  theme_classic()
 
-    
-   
-bp2<- ggplot(datos_tension2, aes(x=Mat_Aporte, y=Esfuerzo)) + 
-      geom_boxplot(fill='#A4A4A4', color="black", width=0.5)+
-      labs(title="Diagrama de cajas por\nmaterial de aporte",x="Aporte", y = "Resistencia última \na la tracción (MPa)")+
-      scale_fill_grey() + theme_classic()
-
+bp2 <- ggplot(datos_tension2, aes(x=Mat_Aporte, y=Esfuerzo)) + 
+  geom_boxplot(fill='#A4A4A4', color="black", width=0.5) +
+  labs(title="Diagrama de cajas por\nmaterial de aporte",
+       x="Aporte", 
+       y = "Resistencia última \na la tracción (MPa)")+
+  scale_fill_grey() + 
+  theme_classic()
 
 bp3 <- ggplot(datos_tension, aes(x=factor(Mat_Aporte),y=Esfuerzo)) + 
-       geom_boxplot(aes(fill=factor(Electrodo))) + 
-       scale_y_continuous(name = "Resistencia a la tracción (MPa)")+ 
-       scale_x_discrete(name = "Método de aporte",
-                        labels=c("Aporte ER4043", "Sin material de aporte")) +
-       ggtitle("Diagrama de cajas conjunto") +
-       theme_bw()+
-       theme(legend.position = "top")+
-       scale_fill_brewer(palette = "Accent", name = "Electrodo\nno consumible", labels = c("Punto Verde", "Punto Violeta")) 
+  geom_boxplot(aes(fill=factor(Electrodo))) + 
+  scale_y_continuous(name = "Resistencia a la tracción (MPa)") + 
+  scale_x_discrete(name = "Método de aporte",
+                   labels=c("Aporte ER4043", 
+                            "Sin material de aporte")) +
+  ggtitle("Diagrama de cajas conjunto") +
+  theme_bw()+
+  theme(legend.position = "top")+
+  scale_fill_brewer(palette = "Accent", 
+                    name = "Electrodo\nno consumible", 
+                    labels = c("Punto Verde", "Punto Violeta")) 
 
-
-grid.arrange(arrangeGrob(bp1, bp2, nrow = 2),
-             bp3,# Second row with 2 plots in 2 different columns
-             ncol = 2) 
+grid.arrange(arrangeGrob(bp1, bp2, nrow = 2), bp3, ncol = 2) 
 ```
 
 <br/><br/>
