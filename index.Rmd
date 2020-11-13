@@ -1,12 +1,423 @@
 ---
 title: "Diseño y análisis experimental"
-author: "David A. Ramírez"
 date: "Octubre de 2020"
 output: html_document
 ---
 
-# Titulo 1
-## Titulo 2
-### Titulo 3
-#### Titulo 4
-##### Titulo 5
+## Introducción
+
+A continuación se presenta el análisis de un experimento que mide la resistencia a la tracción de unas probetas soldadas. Se trató de un diseño factorial completo en arreglo completamente al azar (CRFD, por sus siglas en inglés). Se trabajó un diseño del tipo $2^k$, donde $k=2$, obteniendo 4 tratamientos con 2 réplicas cada uno. La investigación se divide en ciertas etapas, se hace un análisis gráfico de los resultados de la experimentación, se determinan las medias de los tratamientos, se plantean los modelos de efectos y regresión para finalmente realizar un análisis de varianza y determinar efectos principales.
+
+En este diseño en particular hay 2 factores con dos niveles cada uno. Los factores a estudiar son material de aporte (Factor A) y electrodo no consumible (Factor B). Los niveles escogidos fueron criterio del diseñador, siendo por tanto con aporte 4043 y sin aporte para el caso del factor A y electrodo punto verde y electrodo punto violeta para el factor B. De acuerdo con la notación Yates, los niveles de los factores se trabajan como altos (+) y bajos (-).
+
+
+## Preparación y verificación de los datos
+
+Se cargan las liberías necesarias
+
+```{r Librerías, message=FALSE, warning=FALSE}
+library(readxl)
+library(DT)
+library(collapsibleTree)
+library(ggplot2)
+library(gridExtra)
+library(tidyverse)
+library(car)
+library(graphics)
+library(pander)
+library(ggplot2)
+library(knitr)
+```
+
+Recordar que en caso de no tener alguna libería instalada, se debe usar el comando install.packages("Nombre_librería"), esto debe realizarse una única vez.
+
+```{r}
+datos_tension <- read_excel("Datos_tensión.xlsx")
+DT::datatable(datos_tension)
+```
+
+En caso de que el data frame no haya considerado los respectivos factores como tal, es necesario hacer la transformación de las caterogrías. 
+
+```{r}
+datos_tension$Mat_Aporte<- as.factor(datos_tension$Mat_Aporte)
+
+datos_tension$Electrodo<- as.factor(datos_tension$Electrodo)
+```
+
+Con el comando _str_ veriicamos la naturaleza tanto de los factores como de la respuesta, esto se hace con el objetivo de evitar problemas al momento de ejecutar los modelos de regresión. Se puede observar como el esfuerzo, que es la variable respuesta, tiene categoría numérica y Material de Aporte y Electrodo tienen categoría factorial. Generalmente las réplicas no se incluyen en el dataframe, pero esta vez se realizó para demostrar que es un diseño balanceado.
+
+
+```{r}
+str(datos_tension)
+```
+
+
+```{r echo=FALSE}
+verif_balanced = with(datos_tension, table(Mat_Aporte, Electrodo))
+verif_repeat= with(datos_tension, table(Mat_Aporte, Electrodo, Repeat))
+```
+
+Por último, verificamos si efectivamente se trata de un diseño balanceado. Como ya se comentó, con los dos niveles por cada factor y las dos réplicas, debe haber 4 valores por cada tratamiento para un total de 16 datos.
+
+<center>`r pander(verif_balanced)`</center>
+
+También hacemos uso de la categoría de repetición para verificar que efectivamente haya 2 datos por cada tratamiento en cada réplica.
+
+<center>`r pander(verif_repeat)`</center>
+
+ <br/><br/>
+Como herramienta adicional para entender la naturaleza del experimento, se presenta el siguiente diagrama de árbol, en el cual se evidencia el concepto de factorial completo, es decir, todos los niveles del segundo factor son igualmente probado en todos los niveles del primer factor.
+
+```{r echo=FALSE}
+collapsibleTree::collapsibleTree(datos_tension, hierarchy = c('Mat_Aporte', 'Electrodo'))
+```
+
+
+## Análisis del experimento
+
+### Análisis gráfico
+
+De acuerdo a lo anteriormente expuesto, los diseños $2^k$ se trabajan como altos y bajos en los respectivos niveles de sus dos tratamientos. Una forma de generalizar el experimiento es mediante el siguiente cuadro, que permite ver como se relacionan los diferentes niveles de los tratamientos y su respectiva interacción.
+
+```{r echo=FALSE}
+plot(function(x){cos(x)},xlim=c(-2,4), axes=F, 
+     ylab="",xlab="",ylim=c(0,5),col="white")
+
+text(x=0.5,y=0.1,expression((ER4043)))
+text(x=0.5,y=0.4,expression(Bajo))
+text(x=0.5,y=0.75,expression("-"))
+
+text(x=2.5,y=0.1,expression(("Sin Aporte")))
+text(x=2.5,y=0.4,expression(Alto))
+text(x=2.5,y=0.75,expression("+"))
+
+segments(x0 =0.5 ,y0 =1 ,x1 =2.5 ,y1 = 1,lwd=1)
+segments(x0 =0.5 ,y0 =0.9 ,x1 =0.5 ,y1 = 1.1,lwd=1)
+segments(x0 =2.5 ,y0 =0.9 ,x1 =2.5 ,y1 = 1.1,lwd=1)
+
+text(x=0.5,y=1.3,expression(("x+y+z+w")))
+text(x=0.5,y=1.6,expression("(1)=X"))
+
+text(x=2.5,y=1.3,expression(("x+y+z+w")))
+text(x=2.5,y=1.6,expression("a=Y"))
+
+#RECTÁNGULO----------------------------
+
+segments(x0 =0.5 ,y0 =2 ,x1 =2.5 ,y1 = 2,lwd=2)
+segments(x0 =0.5 ,y0 =2 ,x1 =0.5 ,y1 = 4,lwd=2)
+segments(x0 =0.5 ,y0 =4 ,x1 =2.5 ,y1 = 4,lwd=2)
+segments(x0 =2.5 ,y0 =2 ,x1 =2.5 ,y1 = 4,lwd=2)
+
+points(x=0.5,y=2,pch=16,cex=1.2)
+points(x=2.5,y=2,pch=16,cex=1.2)
+points(x=0.5,y=4,pch=16,cex=1.2)
+points(x=2.5,y=4,pch=16,cex=1.2)
+
+#LATERAL------------------------------
+
+segments(x0 =0 ,y0 =2 ,x1 =0 ,y1 = 4,lwd=1)
+segments(x0 =-0.1 ,y0 =2 ,x1 =0.1 ,y1 = 2,lwd=1)
+segments(x0 =-0.1 ,y0 =4 ,x1 =0.1 ,y1 = 4,lwd=1)
+
+
+text(x=-0.3,y=2,expression("-"))
+text(x=-0.3,y=4,expression("+"))
+
+text(x=-1,y=1.9,expression(("Punto verde")))
+text(x=-1,y=2.2,expression("Bajo"))
+
+text(x=-1,y=3.9,expression(("Punto violeta")))
+text(x=-1,y=4.2,expression("Alto"))
+
+text(x=0.5,y=4.3,expression(("x+y+z+w")))
+text(x=0.5,y=4.6,expression("b=Z"))
+
+text(x=2.5,y=4.3,expression(("x+y+z+w")))
+text(x=2.5,y=4.6,expression("ab=W"))
+
+```
+ <br/><br/>
+ 
+ Esta representación es especialmente útil al momento de hallar los efectos principales de los factores.
+ 
+
+```{r echo=FALSE}
+
+
+medias_aporte=with(datos_tension, tapply(Esfuerzo, Mat_Aporte, mean))
+
+medias_electrodo=with(datos_tension, tapply(Esfuerzo, Electrodo, mean))
+
+medias_globales= with(datos_tension, tapply(Esfuerzo, list(Mat_Aporte, Electrodo), mean))
+
+```
+
+
+ Como primera exploración del experimiento podemos ver y analizar los promedios de cada factor y su respectiva interacción. Veamos primero las medias de los niveles del factor A, es decir material de aporte.
+
+<center>`r pander(medias_aporte)`</center>
+
+Ahora, las medias de los niveles del factor B, electrodo no consumible.
+
+<center>`r pander(medias_electrodo)`</center>
+
+Ahora bien, ver las medias de los diferentes niveles de los factores es apropiado para visualizar algunas tendencias de los datos, sin embargo, no es la forma más recomendable a la hora de analizar experimentos con varios tratamientos. La mejor forma es ver la media de los respectivos tratamientos, como se presenta a continuación.
+
+<center>`r pander(medias_globales)`</center>
+
+
+```{r include=FALSE}
+
+#Se crea un nuevo dataframe suplente, que se usará para generar los gráficos básicos.
+
+datos_tension2<- datos_tension
+
+datos_tension2$Electrodo<- recode(datos_tension2$Electrodo, "'P_verde'='Punto Verde'; 'P_Violeta'='Punto Violeta'")
+
+datos_tension2$Mat_Aporte<- recode(datos_tension2$Mat_Aporte, "'Con_Aporte'='ER4043'; 'Sin_Aporte'='Sin aporte'")
+
+```
+
+ <br/><br/>
+ 
+ Con dichas medias de los tratamientos, se construyen los gráficos de interacción, de cada categoría. Como su nombre lo menciona, podemos evidenciar por la morfología de las curvas, la presencia de interacciones que posteriormente se evaluarán y/o confirmarán con el análisis de varianza.
+
+```{r Gráficos de interacción, echo=TRUE}
+
+
+with(datos_tension2, {
+  
+  interaction.plot(Mat_Aporte, 
+                                     Electrodo, 
+                                     Esfuerzo,
+                                     type = "l",
+                                     lty=1,
+                                     lwd=1,
+                                     legend=T,
+                                     main="Interacción material aporte - Electrodo no consumible", 
+                                     xlab="Material aporte", 
+                                     ylab="Resistencia media del tratamiento (MPa)", 
+                                     col=c(3:8),
+                   pch=c(19, 17, 15),
+                                     trace.label = "Electrodo",
+                                     xpd = FALSE)
+
+  interaction.plot(Electrodo, 
+                                     Mat_Aporte, 
+                                     Esfuerzo, 
+                                     type = "l",
+                                     lty=1,
+                                     lwd=1,
+                                     legend=T,
+                                     main="Interacción electrodo no consumible - Material aporte", 
+                                     xlab="Electrodo no consumible", 
+                                     ylab="Resistencia media del tratamiento (MPa)", 
+                                     col=c(1:3),
+                   pch=c(19, 17, 15),
+                                     trace.label = "Material de aporte",
+                                     xpd = FALSE)})
+
+
+
+```
+
+ <br/><br/>
+ Otra herramienta visual que nos permite analizar el experimiento son los diagramas de caja. En este tipo de gráficos podemos hacernos una idea de como es la varianza de los niveles de los tratamientos como la comparación entre ellos, también podemos ver los datos atípicos que presentó la experimentación.
+
+```{r Boxplot, echo=FALSE}
+
+bp1<- ggplot(datos_tension2, aes(x=Electrodo, y=Esfuerzo)) + 
+      geom_boxplot(fill='#A4A4A4', color="black", width=0.5)+
+      labs(title="Diagrama de cajas por\nElectrodo no consumible",x="Electrodo no consumible", y = "Resistencia última \na la tracción (MPa)")+
+      scale_fill_grey() + theme_classic()
+
+    
+   
+bp2<- ggplot(datos_tension2, aes(x=Mat_Aporte, y=Esfuerzo)) + 
+      geom_boxplot(fill='#A4A4A4', color="black", width=0.5)+
+      labs(title="Diagrama de cajas por\nmaterial de aporte",x="Aporte", y = "Resistencia última \na la tracción (MPa)")+
+      scale_fill_grey() + theme_classic()
+
+
+bp3 <- ggplot(datos_tension, aes(x=factor(Mat_Aporte),y=Esfuerzo)) + 
+       geom_boxplot(aes(fill=factor(Electrodo))) + 
+       scale_y_continuous(name = "Resistencia a la tracción (MPa)")+ 
+       scale_x_discrete(name = "Método de aporte",
+                        labels=c("Aporte ER4043", "Sin material de aporte")) +
+       ggtitle("Diagrama de cajas conjunto") +
+       theme_bw()+
+       theme(legend.position = "top")+
+       scale_fill_brewer(palette = "Accent", name = "Electrodo\nno consumible", labels = c("Punto Verde", "Punto Violeta")) 
+
+
+grid.arrange(arrangeGrob(bp1, bp2, nrow = 2),
+             bp3,# Second row with 2 plots in 2 different columns
+             ncol = 2) 
+```
+
+<br/><br/>
+
+
+### Modelo de análisis de varianza
+ 
+El modelo matemático para un diseño de dos factores completamente aleatorizado puede escribirse de la siguiente forma:
+ 
+ 
+ $$Y_{ijk} = \mu_{ij} + e_{ijk}$$
+donde $i$ representa los niveles del primer factor, $j$ representa los niveles del segundo factor y $k$ representa el número de repeticiones. Este modelo recibe el nombre de modelo de medias de celdas y $\mu_{ij}$ representa la respuesta esperada en la celda $ij$-esima.
+
+Se puede representar el término de respuesta en términos de los efectos e interacción.
+
+
+ $$\mu_{ij} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij}$$
+ Por tal motivo, se define la interacción como la diferencia entre las medias de los tratamientos y la porción aditiva del modelo.
+ 
+ 
+ $$(\alpha\beta)_{ij} = \mu_{ij} - (\mu + \alpha_i + \beta_j)$$
+ 
+Si la estructura final del modelo es aditiva, significa que los términos de la interacción son iguales a cero. Reduciendo la expresión de la media de los tratamientos a $\mu_{ij} = (\mu + \alpha_i + \beta_j)$
+ 
+ 
+ Haciendo los reemplazos respectivos, llegamos al modelo de efectos. En el modelo de efectos $\alpha_i$ y $\beta_i$ son los efectos principales. Estos representan la diferencia entre la media marginal de todos los experimentos al $i$-esimo nivel del factor 1 y la media global,  y la diferencia entre la media marginal de todos los experimentos al $j$-esimo nivel del factor 2 y la media global, respectivamente.
+ 
+ $$Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \epsilon_{ijk}\\i=1, 2\\j=1, 2\\k=1, 2\\ \sum_{i=1}^2 \alpha_i=0 \\ \sum_{i=1}^2 \beta_j=0 \\ \sum_{i=1}^2 (\alpha\beta)_{ij}=0 \\ \sum_{j=1}^2 (\alpha\beta)_{ij}=0$$
+ 
+ Para poder adoptar las los resultados de las pruebas que se realicen se deben hacer ciertas suposiciones, las cuales se deben probar. Dichas suposiciones son:
+ 
+ * Los residuos siguen distribución normal.
+ * Los residuos tienen homogeneidad de varianza.
+ * Los residuos son independientes (espacial y temporal).
+ 
+ La independencia se garantiza cuando la combinación de tratamientos son asignados de forma aleatoria a las unidades experimentales. La homgeneidad de varianzas y la normalidad se pueden verificar con gráficos o con las respectivas pruebas.
+ 
+#### Hipótesis 
+ 
+ Para el uso del ANOVA, vamos a probar 3 hipótesis diferentes:
+ 
+ * Hipótesis sobre igualdad en efectos del factor 1: Estudiar si hay diferencia significativa en la resistencia a la tracción promedio debido al material de aporte.
+
+     i) $H_0^{'}: \alpha_1 = \alpha_2 = 0$ (el material de aporte no influye).
+     ii) $\\H_1^{'}:$ Al menos un $\alpha_i$ no es igual a cero (el material de aporte influye).  
+ <br/>
+ * Hipótesis sobre igualdad en efectos del factor 2: Estudiar si hay diferencia significativa en la resistencia a la tracción promedio debido al electrodo no consumible.
+ 
+     i) $H_0^{''}: \beta_1 = \beta_2 = 0$ (el electrodo no consumible no influye).
+     ii) $\\H_1^{''}:$ Al menos un $\beta_j$ no es igual a cero (el electrodo no consumible influye)..
+ <br/><br/>
+* Hipótesis sobre la interacción de los factores: Estudiar si hay diferencia significativa en la resistencia a la tracción promedio, debido a la interacción del material de aporte y el electrodo no consumible.
+ 
+     i) $H_0^{'''}: {(\alpha\beta)}_{11} = {(\alpha\beta)}_{12} = {(\alpha\beta)}_{21} = {(\alpha\beta)}_{22} = 0$ (no hay interacción)
+     ii) $\\H_1^{'''}:$ Al menos un $(\alpha\beta)_{ij}$ no es igual a cero (hay interacción).
+  <br/><br/>
+
+
+### Análisis de Varianza
+
+Se lleva a cabo un análisis de varianza de doble vía para determinar efectos y posibles interacciones.
+
+Para ello, primero se genera un modelo lineal, el cual es posible usar para hallar ejecutar ANOVA ya que se trata de un modelo factorial completo. Luego mediante el comando _anova_ obtenemos la tabla de Análisis de Varianza.
+
+```{r}
+modelo_lineal = lm(Esfuerzo~Mat_Aporte*Electrodo, data=datos_tension)
+modelo_anova= anova(modelo_lineal)
+```
+
+<center>`r pander(modelo_anova)`</center>
+
+### Medición de medias y efectos
+
+Es posible calcular las medias (que ya se reportaron) haciendo uso del modelo de anova.
+
+```{r}
+model.tables(aov(modelo_lineal), "means")
+```
+
+Con el modelo de anova también se pueden extraer los efectos principales de cada nivel de los respectivos factores.
+
+```{r}
+model.tables(aov(modelo_lineal), "effects")
+```
+
+
+```{r}
+plot.design(Esfuerzo~Mat_Aporte+Electrodo, fun="mean", data=datos_tension, main=" Gráfica de efectos principales", ylab= "Resistencia a la tracción", xlab="Factores")
+
+```
+ 
+Se realiza Tukey, en caso de que así se requiera...
+
+### Modelo de regresión lineal
+
+Para la investigación se considera el modelo de detección de respuesta:
+
+$$y = \beta_{0} + \beta_{1} x_{1} + \beta_{2} x_{2} + \beta_{12} x_{1} x_{2} + \varepsilon$$
+
+El modelo de detección de respuesta que se propone incluye efectos lineales de los factores y un coeficiente de producto cruzado, que repreenta el componente de interacción lineal del modelo.
+
+Para conocer las propiedades del modelo generado, se hace uso de la herramienta summary.
+
+```{r}
+summary(modelo_lineal)
+```
+
+También, se determinan los intervalos de confianza de los coeficientes del modelo de regresión lineal.
+
+```{r}
+int_conf=confint(modelo_lineal)
+```
+
+<center>`r pander(int_conf)`</center>
+
+### Verificación de supuestos
+
+Para poder adoptar todos los resultados anteriormente reportados, es indispensable hacer ciertas verificaciones sobre los residuales del modelo. Como se mencionó en la respectiva sección. Los residuales deben cumplir tres supuestos, en caso tal de que alguno no se cumpla, se comprende como una violación grave al supuesto y hay que reformular en cierta medida el análisis.
+
+#### Extracción de residuales y gráficas de análisis
+
+Los supuestos mencionados se pueden deducir de las gráficas de los residuales. La normalidad se puede inferir a partir de la gráfica normal Q-Q. La variabilidad de cada uno de los factores se puede determinar como igual a partir del gráfico de los residuales versus los niveles de los factores (Constant Leverage). El gráfico de residuales versus las unidades experimentales sirve para determinar la independencia temporal o espacial de los residuales.
+
+```{r}
+par(mfrow = c(2,2))
+plot(modelo_lineal, which = 1)
+plot(modelo_lineal, which = 5)
+plot(modelo_lineal, which = 2)
+plot(residuals(modelo_lineal) ~ Esfuerzo, data = datos_tension, main = "Residuales vs. Unidades Exp.", ylab="Residuales")
+abline(h = 0)
+```
+<br/><br/>
+
+Si bien los gráficos ofrecen una buena aproximación a la evaluación de los supuestos, el uso de las pruebas específicas son un complemento para esto.
+
+#### Normalidad
+
+
+```{r}
+prueba_norm<-shapiro.test(modelo_lineal$residuals)
+prueba_norm
+ifelse(prueba_norm$p.value<0.05, "Se rechaza Ho","No rechazo Ho")
+```
+
+#### Homogeneidad de Varianzas
+
+```{r}
+prueba_var<-bartlett.test(modelo_lineal$residuals,datos_tension$Mat_Aporte)
+
+
+ifelse(prueba_var$p.value<0.05, "Rechazo Ho", "No rechazo Ho")
+
+
+leveneTest(datos_tension$Esfuerzo~datos_tension$Mat_Aporte*datos_tension$Electrodo)
+
+```
+
+
+#### Independencia de los residuales
+
+```{r}
+plot(rstandard(modelo_lineal), 
+     main="Gráfica de residuos estándar",
+     xlab="Observación", ylab="Residuos estandarizados")
+```
+
+ 
+ 

@@ -2,4 +2,6 @@
 title: "Acerca de este sitio"
 ---
 
-Sitio web creado para mostrar....
+Repositorio creado con el fin de mostrar el análisis experimental de un diseño $2^2$, para determinar influencia de soldar aluminio 2024-T3 usando material de aporte 4043 o sin usar aporte, combinado con el uso de electrodo no consumible punto verde y punto violeta.
+
+Este análisis hace parte del trabajo de grado titulado "Estudio de la soldabilidad de la aleación de aluminio 2024 mediante el proceso GTAW de alta frecuencia, con mezcla de gases Ar-N2O-O2 y electrodo EWG." para optar al título de Magister en Ingeniería - Materiales y procesos, de la Universidad Nacional de Colombia, sede Bogotá.

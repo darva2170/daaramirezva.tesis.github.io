@@ -9,12 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="David A. Ramírez" />
 
 
 <title>Diseño y análisis experimental</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -22,8 +21,111 @@
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.14/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="site_libs/d3-4.10.2/d3.min.js"></script>
+<link href="site_libs/collapsibleTree-0.1.6/collapsibleTree.css" rel="stylesheet" />
+<script src="site_libs/collapsibleTree-binding-0.1.7/collapsibleTree.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -278,24 +380,523 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Diseño y análisis experimental</h1>
-<h4 class="author">David A. Ramírez</h4>
 <h4 class="date">Octubre de 2020</h4>
 
 </div>
 
 
-<div id="titulo-1" class="section level1">
-<h1>Titulo 1</h1>
-<div id="titulo-2" class="section level2">
-<h2>Titulo 2</h2>
-<div id="titulo-3" class="section level3">
-<h3>Titulo 3</h3>
-<div id="titulo-4" class="section level4">
-<h4>Titulo 4</h4>
-<div id="titulo-5" class="section level5">
-<h5>Titulo 5</h5>
+<div id="introducción" class="section level2">
+<h2>Introducción</h2>
+<p>A continuación se presenta el análisis de un experimento que mide la resistencia a la tracción de unas probetas soldadas. Se trató de un diseño factorial completo en arreglo completamente al azar (CRFD, por sus siglas en inglés). Se trabajó un diseño del tipo <span class="math inline">\(2^k\)</span>, donde <span class="math inline">\(k=2\)</span>, obteniendo 4 tratamientos con 2 réplicas cada uno. La investigación se divide en ciertas etapas, se hace un análisis gráfico de los resultados de la experimentación, se determinan las medias de los tratamientos, se plantean los modelos de efectos y regresión para finalmente realizar un análisis de varianza y determinar efectos principales.</p>
+<p>En este diseño en particular hay 2 factores con dos niveles cada uno. Los factores a estudiar son material de aporte (Factor A) y electrodo no consumible (Factor B). Los niveles escogidos fueron criterio del diseñador, siendo por tanto con aporte 4043 y sin aporte para el caso del factor A y electrodo punto verde y electrodo punto violeta para el factor B. De acuerdo con la notación Yates, los niveles de los factores se trabajan como altos (+) y bajos (-).</p>
+</div>
+<div id="preparación-y-verificación-de-los-datos" class="section level2">
+<h2>Preparación y verificación de los datos</h2>
+<p>Se cargan las liberías necesarias</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(readxl)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(DT)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(collapsibleTree)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(gridExtra)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">library</span>(car)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">library</span>(graphics)</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">library</span>(pander)</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">library</span>(knitr)</span></code></pre></div>
+<p>Recordar que en caso de no tener alguna libería instalada, se debe usar el comando install.packages(“Nombre_librería”), esto debe realizarse una única vez.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>datos_tension &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;Datos_tensión.xlsx&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(datos_tension)</span></code></pre></div>
+<div id="htmlwidget-d9d573d7a9877d61b876" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d9d573d7a9877d61b876">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],[54,54,52,57,56,59,55,55,51,45,46,45,46,58,47,60],["Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte"],["P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta","P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta"],["I","I","II","II","I","I","II","II","I","I","II","II","I","I","II","II"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Esfuerzo<\/th>\n      <th>Mat_Aporte<\/th>\n      <th>Electrodo<\/th>\n      <th>Repeat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>En caso de que el data frame no haya considerado los respectivos factores como tal, es necesario hacer la transformación de las caterogrías.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>datos_tension<span class="op">$</span>Mat_Aporte&lt;-<span class="st"> </span><span class="kw">as.factor</span>(datos_tension<span class="op">$</span>Mat_Aporte)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a>datos_tension<span class="op">$</span>Electrodo&lt;-<span class="st"> </span><span class="kw">as.factor</span>(datos_tension<span class="op">$</span>Electrodo)</span></code></pre></div>
+<p>Con el comando <em>str</em> veriicamos la naturaleza tanto de los factores como de la respuesta, esto se hace con el objetivo de evitar problemas al momento de ejecutar los modelos de regresión. Se puede observar como el esfuerzo, que es la variable respuesta, tiene categoría numérica y Material de Aporte y Electrodo tienen categoría factorial. Generalmente las réplicas no se incluyen en el dataframe, pero esta vez se realizó para demostrar que es un diseño balanceado.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">str</span>(datos_tension)</span></code></pre></div>
+<pre><code>## tibble [16 x 4] (S3: tbl_df/tbl/data.frame)
+##  $ Esfuerzo  : num [1:16] 54 54 52 57 56 59 55 55 51 45 ...
+##  $ Mat_Aporte: Factor w/ 2 levels &quot;Con_Aporte&quot;,&quot;Sin_Aporte&quot;: 1 1 1 1 1 1 1 1 2 2 ...
+##  $ Electrodo : Factor w/ 2 levels &quot;P_verde&quot;,&quot;P_Violeta&quot;: 1 1 1 1 2 2 2 2 1 1 ...
+##  $ Repeat    : chr [1:16] &quot;I&quot; &quot;I&quot; &quot;II&quot; &quot;II&quot; ...</code></pre>
+<p>Por último, verificamos si efectivamente se trata de un diseño balanceado. Como ya se comentó, con los dos niveles por cada factor y las dos réplicas, debe haber 4 valores por cada tratamiento para un total de 16 datos.</p>
+<center>
+<table style="width:54%;">
+<colgroup>
+<col width="23%" />
+<col width="13%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">P_verde</th>
+<th align="center">P_Violeta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Con_Aporte</strong></td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Sin_Aporte</strong></td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p>También hacemos uso de la categoría de repetición para verificar que efectivamente haya 2 datos por cada tratamiento en cada réplica.</p>
+<center>
+<table style="width:60%;">
+<colgroup>
+<col width="18%" />
+<col width="16%" />
+<col width="12%" />
+<col width="5%" />
+<col width="6%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td align="center">Repeat</td>
+<td align="center">I</td>
+<td align="center">II</td>
+</tr>
+<tr class="even">
+<td>Mat_Aporte</td>
+<td>Electrodo</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td>Con_Aporte</td>
+<td>P_verde</td>
+<td align="center"></td>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>P_Violeta</td>
+<td align="center"></td>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td>Sin_Aporte</td>
+<td>P_verde</td>
+<td align="center"></td>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>P_Violeta</td>
+<td align="center"></td>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p><br/><br/> Como herramienta adicional para entender la naturaleza del experimento, se presenta el siguiente diagrama de árbol, en el cual se evidencia el concepto de factorial completo, es decir, todos los niveles del segundo factor son igualmente probado en todos los niveles del primer factor.</p>
+<div id="htmlwidget-53141574a37912b1c900" style="width:672px;height:480px;" class="collapsibleTree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-53141574a37912b1c900">{"x":{"data":{"name":"datos_tension","children":[{"name":"Con_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]},{"name":"Sin_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]}]},"options":{"hierarchy":["Mat_Aporte","Electrodo"],"input":null,"attribute":"leafCount","linkLength":null,"fontSize":10,"tooltip":false,"collapsed":true,"zoomable":true,"margin":{"top":20,"bottom":20,"left":90,"right":70},"fill":"lightsteelblue"}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="análisis-del-experimento" class="section level2">
+<h2>Análisis del experimento</h2>
+<div id="análisis-gráfico" class="section level3">
+<h3>Análisis gráfico</h3>
+<p>De acuerdo a lo anteriormente expuesto, los diseños <span class="math inline">\(2^k\)</span> se trabajan como altos y bajos en los respectivos niveles de sus dos tratamientos. Una forma de generalizar el experimiento es mediante el siguiente cuadro, que permite ver como se relacionan los diferentes niveles de los tratamientos y su respectiva interacción.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br/><br/></p>
+<p>Esta representación es especialmente útil al momento de hallar los efectos principales de los factores.</p>
+<p>Como primera exploración del experimiento podemos ver y analizar los promedios de cada factor y su respectiva interacción. Veamos primero las medias de los niveles del factor A, es decir material de aporte.</p>
+<center>
+<table style="width:36%;">
+<colgroup>
+<col width="18%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Con_Aporte</th>
+<th align="center">Sin_Aporte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">55.25</td>
+<td align="center">49.75</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p>Ahora, las medias de los niveles del factor B, electrodo no consumible.</p>
+<center>
+<table style="width:31%;">
+<colgroup>
+<col width="13%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">P_verde</th>
+<th align="center">P_Violeta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">50.5</td>
+<td align="center">54.5</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p>Ahora bien, ver las medias de los diferentes niveles de los factores es apropiado para visualizar algunas tendencias de los datos, sin embargo, no es la forma más recomendable a la hora de analizar experimentos con varios tratamientos. La mejor forma es ver la media de los respectivos tratamientos, como se presenta a continuación.</p>
+<center>
+<table style="width:54%;">
+<colgroup>
+<col width="23%" />
+<col width="13%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">P_verde</th>
+<th align="center">P_Violeta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Con_Aporte</strong></td>
+<td align="center">54.25</td>
+<td align="center">56.25</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Sin_Aporte</strong></td>
+<td align="center">46.75</td>
+<td align="center">52.75</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p><br/><br/></p>
+<p>Con dichas medias de los tratamientos, se construyen los gráficos de interacción, de cada categoría. Como su nombre lo menciona, podemos evidenciar por la morfología de las curvas, la presencia de interacciones que posteriormente se evaluarán y/o confirmarán con el análisis de varianza.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">with</span>(datos_tension2, {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  </span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="kw">interaction.plot</span>(Mat_Aporte, </span>
+<span id="cb6-4"><a href="#cb6-4"></a>                                     Electrodo, </span>
+<span id="cb6-5"><a href="#cb6-5"></a>                                     Esfuerzo,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>                                     <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>                                     <span class="dt">lty=</span><span class="dv">1</span>,</span>
+<span id="cb6-8"><a href="#cb6-8"></a>                                     <span class="dt">lwd=</span><span class="dv">1</span>,</span>
+<span id="cb6-9"><a href="#cb6-9"></a>                                     <span class="dt">legend=</span>T,</span>
+<span id="cb6-10"><a href="#cb6-10"></a>                                     <span class="dt">main=</span><span class="st">&quot;Interacción material aporte - Electrodo no consumible&quot;</span>, </span>
+<span id="cb6-11"><a href="#cb6-11"></a>                                     <span class="dt">xlab=</span><span class="st">&quot;Material aporte&quot;</span>, </span>
+<span id="cb6-12"><a href="#cb6-12"></a>                                     <span class="dt">ylab=</span><span class="st">&quot;Resistencia media del tratamiento (MPa)&quot;</span>, </span>
+<span id="cb6-13"><a href="#cb6-13"></a>                                     <span class="dt">col=</span><span class="kw">c</span>(<span class="dv">3</span><span class="op">:</span><span class="dv">8</span>),</span>
+<span id="cb6-14"><a href="#cb6-14"></a>                   <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">17</span>, <span class="dv">15</span>),</span>
+<span id="cb6-15"><a href="#cb6-15"></a>                                     <span class="dt">trace.label =</span> <span class="st">&quot;Electrodo&quot;</span>,</span>
+<span id="cb6-16"><a href="#cb6-16"></a>                                     <span class="dt">xpd =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb6-17"><a href="#cb6-17"></a></span>
+<span id="cb6-18"><a href="#cb6-18"></a>  <span class="kw">interaction.plot</span>(Electrodo, </span>
+<span id="cb6-19"><a href="#cb6-19"></a>                                     Mat_Aporte, </span>
+<span id="cb6-20"><a href="#cb6-20"></a>                                     Esfuerzo, </span>
+<span id="cb6-21"><a href="#cb6-21"></a>                                     <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb6-22"><a href="#cb6-22"></a>                                     <span class="dt">lty=</span><span class="dv">1</span>,</span>
+<span id="cb6-23"><a href="#cb6-23"></a>                                     <span class="dt">lwd=</span><span class="dv">1</span>,</span>
+<span id="cb6-24"><a href="#cb6-24"></a>                                     <span class="dt">legend=</span>T,</span>
+<span id="cb6-25"><a href="#cb6-25"></a>                                     <span class="dt">main=</span><span class="st">&quot;Interacción electrodo no consumible - Material aporte&quot;</span>, </span>
+<span id="cb6-26"><a href="#cb6-26"></a>                                     <span class="dt">xlab=</span><span class="st">&quot;Electrodo no consumible&quot;</span>, </span>
+<span id="cb6-27"><a href="#cb6-27"></a>                                     <span class="dt">ylab=</span><span class="st">&quot;Resistencia media del tratamiento (MPa)&quot;</span>, </span>
+<span id="cb6-28"><a href="#cb6-28"></a>                                     <span class="dt">col=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>),</span>
+<span id="cb6-29"><a href="#cb6-29"></a>                   <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">17</span>, <span class="dv">15</span>),</span>
+<span id="cb6-30"><a href="#cb6-30"></a>                                     <span class="dt">trace.label =</span> <span class="st">&quot;Material de aporte&quot;</span>,</span>
+<span id="cb6-31"><a href="#cb6-31"></a>                                     <span class="dt">xpd =</span> <span class="ot">FALSE</span>)})</span></code></pre></div>
+<p><img src="index_files/figure-html/Gráficos de interacción-1.png" width="672" /><img src="index_files/figure-html/Gráficos de interacción-2.png" width="672" /></p>
+<p><br/><br/> Otra herramienta visual que nos permite analizar el experimiento son los diagramas de caja. En este tipo de gráficos podemos hacernos una idea de como es la varianza de los niveles de los tratamientos como la comparación entre ellos, también podemos ver los datos atípicos que presentó la experimentación.</p>
+<p><img src="index_files/figure-html/Boxplot-1.png" width="672" /></p>
+<p><br/><br/></p>
+</div>
+<div id="modelo-de-análisis-de-varianza" class="section level3">
+<h3>Modelo de análisis de varianza</h3>
+<p>El modelo matemático para un diseño de dos factores completamente aleatorizado puede escribirse de la siguiente forma:</p>
+<p><span class="math display">\[Y_{ijk} = \mu_{ij} + e_{ijk}\]</span> donde <span class="math inline">\(i\)</span> representa los niveles del primer factor, <span class="math inline">\(j\)</span> representa los niveles del segundo factor y <span class="math inline">\(k\)</span> representa el número de repeticiones. Este modelo recibe el nombre de modelo de medias de celdas y <span class="math inline">\(\mu_{ij}\)</span> representa la respuesta esperada en la celda <span class="math inline">\(ij\)</span>-esima.</p>
+<p>Se puede representar el término de respuesta en términos de los efectos e interacción.</p>
+<p><span class="math display">\[\mu_{ij} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij}\]</span> Por tal motivo, se define la interacción como la diferencia entre las medias de los tratamientos y la porción aditiva del modelo.</p>
+<p><span class="math display">\[(\alpha\beta)_{ij} = \mu_{ij} - (\mu + \alpha_i + \beta_j)\]</span></p>
+<p>Si la estructura final del modelo es aditiva, significa que los términos de la interacción son iguales a cero. Reduciendo la expresión de la media de los tratamientos a <span class="math inline">\(\mu_{ij} = (\mu + \alpha_i + \beta_j)\)</span></p>
+<p>Haciendo los reemplazos respectivos, llegamos al modelo de efectos. En el modelo de efectos <span class="math inline">\(\alpha_i\)</span> y <span class="math inline">\(\beta_i\)</span> son los efectos principales. Estos representan la diferencia entre la media marginal de todos los experimentos al <span class="math inline">\(i\)</span>-esimo nivel del factor 1 y la media global, y la diferencia entre la media marginal de todos los experimentos al <span class="math inline">\(j\)</span>-esimo nivel del factor 2 y la media global, respectivamente.</p>
+<p><span class="math display">\[Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \epsilon_{ijk}\\i=1, 2\\j=1, 2\\k=1, 2\\ \sum_{i=1}^2 \alpha_i=0 \\ \sum_{i=1}^2 \beta_j=0 \\ \sum_{i=1}^2 (\alpha\beta)_{ij}=0 \\ \sum_{j=1}^2 (\alpha\beta)_{ij}=0\]</span></p>
+<p>Para poder adoptar las los resultados de las pruebas que se realicen se deben hacer ciertas suposiciones, las cuales se deben probar. Dichas suposiciones son:</p>
+<ul>
+<li>Los residuos siguen distribución normal.</li>
+<li>Los residuos tienen homogeneidad de varianza.</li>
+<li>Los residuos son independientes (espacial y temporal).</li>
+</ul>
+<p>La independencia se garantiza cuando la combinación de tratamientos son asignados de forma aleatoria a las unidades experimentales. La homgeneidad de varianzas y la normalidad se pueden verificar con gráficos o con las respectivas pruebas.</p>
+<div id="hipótesis" class="section level4">
+<h4>Hipótesis</h4>
+<p>Para el uso del ANOVA, vamos a probar 3 hipótesis diferentes:</p>
+<ul>
+<li><p>Hipótesis sobre igualdad en efectos del factor 1: Estudiar si hay diferencia significativa en la resistencia a la tracción promedio debido al material de aporte.</p>
+<ol style="list-style-type: lower-roman">
+<li><span class="math inline">\(H_0^{&#39;}: \alpha_1 = \alpha_2 = 0\)</span> (el material de aporte no influye).</li>
+<li><span class="math inline">\(\\H_1^{&#39;}:\)</span> Al menos un <span class="math inline">\(\alpha_i\)</span> no es igual a cero (el material de aporte influye).<br />
+<br/></li>
+</ol></li>
+<li><p>Hipótesis sobre igualdad en efectos del factor 2: Estudiar si hay diferencia significativa en la resistencia a la tracción promedio debido al electrodo no consumible.</p>
+<ol style="list-style-type: lower-roman">
+<li><span class="math inline">\(H_0^{&#39;&#39;}: \beta_1 = \beta_2 = 0\)</span> (el electrodo no consumible no influye).</li>
+<li><span class="math inline">\(\\H_1^{&#39;&#39;}:\)</span> Al menos un <span class="math inline">\(\beta_j\)</span> no es igual a cero (el electrodo no consumible influye).. <br/><br/></li>
+</ol></li>
+<li><p>Hipótesis sobre la interacción de los factores: Estudiar si hay diferencia significativa en la resistencia a la tracción promedio, debido a la interacción del material de aporte y el electrodo no consumible.</p>
+<ol style="list-style-type: lower-roman">
+<li><span class="math inline">\(H_0^{&#39;&#39;&#39;}: {(\alpha\beta)}_{11} = {(\alpha\beta)}_{12} = {(\alpha\beta)}_{21} = {(\alpha\beta)}_{22} = 0\)</span> (no hay interacción)</li>
+<li><span class="math inline">\(\\H_1^{&#39;&#39;&#39;}:\)</span> Al menos un <span class="math inline">\((\alpha\beta)_{ij}\)</span> no es igual a cero (hay interacción). <br/><br/></li>
+</ol></li>
+</ul>
 </div>
 </div>
+<div id="análisis-de-varianza" class="section level3">
+<h3>Análisis de Varianza</h3>
+<p>Se lleva a cabo un análisis de varianza de doble vía para determinar efectos y posibles interacciones.</p>
+<p>Para ello, primero se genera un modelo lineal, el cual es posible usar para hallar ejecutar ANOVA ya que se trata de un modelo factorial completo. Luego mediante el comando <em>anova</em> obtenemos la tabla de Análisis de Varianza.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>modelo_lineal =<span class="st"> </span><span class="kw">lm</span>(Esfuerzo<span class="op">~</span>Mat_Aporte<span class="op">*</span>Electrodo, <span class="dt">data=</span>datos_tension)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>modelo_anova=<span class="st"> </span><span class="kw">anova</span>(modelo_lineal)</span></code></pre></div>
+<center>
+<table style="width:99%;">
+<caption>Analysis of Variance Table</caption>
+<colgroup>
+<col width="37%" />
+<col width="6%" />
+<col width="12%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Df</th>
+<th align="center">Sum Sq</th>
+<th align="center">Mean Sq</th>
+<th align="center">F value</th>
+<th align="center">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Mat_Aporte</strong></td>
+<td align="center">1</td>
+<td align="center">121</td>
+<td align="center">121</td>
+<td align="center">7.014</td>
+<td align="center">0.02124</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Electrodo</strong></td>
+<td align="center">1</td>
+<td align="center">64</td>
+<td align="center">64</td>
+<td align="center">3.71</td>
+<td align="center">0.0781</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>Mat_Aporte:Electrodo</strong></td>
+<td align="center">1</td>
+<td align="center">16</td>
+<td align="center">16</td>
+<td align="center">0.9275</td>
+<td align="center">0.3545</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Residuals</strong></td>
+<td align="center">12</td>
+<td align="center">207</td>
+<td align="center">17.25</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+</tbody>
+</table>
+</center>
+</div>
+<div id="medición-de-medias-y-efectos" class="section level3">
+<h3>Medición de medias y efectos</h3>
+<p>Es posible calcular las medias (que ya se reportaron) haciendo uso del modelo de anova.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">model.tables</span>(<span class="kw">aov</span>(modelo_lineal), <span class="st">&quot;means&quot;</span>)</span></code></pre></div>
+<pre><code>## Tables of means
+## Grand mean
+##      
+## 52.5 
+## 
+##  Mat_Aporte 
+## Mat_Aporte
+## Con_Aporte Sin_Aporte 
+##      55.25      49.75 
+## 
+##  Electrodo 
+## Electrodo
+##   P_verde P_Violeta 
+##      50.5      54.5 
+## 
+##  Mat_Aporte:Electrodo 
+##             Electrodo
+## Mat_Aporte   P_verde P_Violeta
+##   Con_Aporte 54.25   56.25    
+##   Sin_Aporte 46.75   52.75</code></pre>
+<p>Con el modelo de anova también se pueden extraer los efectos principales de cada nivel de los respectivos factores.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">model.tables</span>(<span class="kw">aov</span>(modelo_lineal), <span class="st">&quot;effects&quot;</span>)</span></code></pre></div>
+<pre><code>## Tables of effects
+## 
+##  Mat_Aporte 
+## Mat_Aporte
+## Con_Aporte Sin_Aporte 
+##       2.75      -2.75 
+## 
+##  Electrodo 
+## Electrodo
+##   P_verde P_Violeta 
+##        -2         2 
+## 
+##  Mat_Aporte:Electrodo 
+##             Electrodo
+## Mat_Aporte   P_verde P_Violeta
+##   Con_Aporte  1      -1       
+##   Sin_Aporte -1       1</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">plot.design</span>(Esfuerzo<span class="op">~</span>Mat_Aporte<span class="op">+</span>Electrodo, <span class="dt">fun=</span><span class="st">&quot;mean&quot;</span>, <span class="dt">data=</span>datos_tension, <span class="dt">main=</span><span class="st">&quot; Gráfica de efectos principales&quot;</span>, <span class="dt">ylab=</span> <span class="st">&quot;Resistencia a la tracción&quot;, xlab=&quot;</span>Factores<span class="st">&quot;)</span></span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Se realiza Tukey, en caso de que así se requiera…</p>
+</div>
+<div id="modelo-de-regresión-lineal" class="section level3">
+<h3>Modelo de regresión lineal</h3>
+<p>Para la investigación se considera el modelo de detección de respuesta:</p>
+<p><span class="math display">\[y = \beta_{0} + \beta_{1} x_{1} + \beta_{2} x_{2} + \beta_{12} x_{1} x_{2} + \varepsilon\]</span></p>
+<p>El modelo de detección de respuesta que se propone incluye efectos lineales de los factores y un coeficiente de producto cruzado, que repreenta el componente de interacción lineal del modelo.</p>
+<p>Para conocer las propiedades del modelo generado, se hace uso de la herramienta summary.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">summary</span>(modelo_lineal)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Esfuerzo ~ Mat_Aporte * Electrodo, data = datos_tension)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -6.75  -1.75  -0.50   2.75   7.25 
+## 
+## Coefficients:
+##                                         Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                               54.250      2.077  26.124 6.05e-12
+## Mat_AporteSin_Aporte                      -7.500      2.937  -2.554   0.0253
+## ElectrodoP_Violeta                         2.000      2.937   0.681   0.5088
+## Mat_AporteSin_Aporte:ElectrodoP_Violeta    4.000      4.153   0.963   0.3545
+##                                            
+## (Intercept)                             ***
+## Mat_AporteSin_Aporte                    *  
+## ElectrodoP_Violeta                         
+## Mat_AporteSin_Aporte:ElectrodoP_Violeta    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.153 on 12 degrees of freedom
+## Multiple R-squared:  0.4926, Adjusted R-squared:  0.3658 
+## F-statistic: 3.884 on 3 and 12 DF,  p-value: 0.03755</code></pre>
+<p>También, se determinan los intervalos de confianza de los coeficientes del modelo de regresión lineal.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>int_conf=<span class="kw">confint</span>(modelo_lineal)</span></code></pre></div>
+<center>
+<table style="width:89%;">
+<colgroup>
+<col width="63%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">2.5 %</th>
+<th align="center">97.5 %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">49.73</td>
+<td align="center">58.77</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Mat_AporteSin_Aporte</strong></td>
+<td align="center">-13.9</td>
+<td align="center">-1.101</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ElectrodoP_Violeta</strong></td>
+<td align="center">-4.399</td>
+<td align="center">8.399</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Mat_AporteSin_Aporte:ElectrodoP_Violeta</strong></td>
+<td align="center">-5.049</td>
+<td align="center">13.05</td>
+</tr>
+</tbody>
+</table>
+</center>
+</div>
+<div id="verificación-de-supuestos" class="section level3">
+<h3>Verificación de supuestos</h3>
+<p>Para poder adoptar todos los resultados anteriormente reportados, es indispensable hacer ciertas verificaciones sobre los residuales del modelo. Como se mencionó en la respectiva sección. Los residuales deben cumplir tres supuestos, en caso tal de que alguno no se cumpla, se comprende como una violación grave al supuesto y hay que reformular en cierta medida el análisis.</p>
+<div id="extracción-de-residuales-y-gráficas-de-análisis" class="section level4">
+<h4>Extracción de residuales y gráficas de análisis</h4>
+<p>Los supuestos mencionados se pueden deducir de las gráficas de los residuales. La normalidad se puede inferir a partir de la gráfica normal Q-Q. La variabilidad de cada uno de los factores se puede determinar como igual a partir del gráfico de los residuales versus los niveles de los factores (Constant Leverage). El gráfico de residuales versus las unidades experimentales sirve para determinar la independencia temporal o espacial de los residuales.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">plot</span>(modelo_lineal, <span class="dt">which =</span> <span class="dv">1</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="kw">plot</span>(modelo_lineal, <span class="dt">which =</span> <span class="dv">5</span>)</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="kw">plot</span>(modelo_lineal, <span class="dt">which =</span> <span class="dv">2</span>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="kw">plot</span>(<span class="kw">residuals</span>(modelo_lineal) <span class="op">~</span><span class="st"> </span>Esfuerzo, <span class="dt">data =</span> datos_tension, <span class="dt">main =</span> <span class="st">&quot;Residuales vs. Unidades Exp.&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Residuales&quot;</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" width="672" /> <br/><br/></p>
+<p>Si bien los gráficos ofrecen una buena aproximación a la evaluación de los supuestos, el uso de las pruebas específicas son un complemento para esto.</p>
+</div>
+<div id="normalidad" class="section level4">
+<h4>Normalidad</h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>prueba_norm&lt;-<span class="kw">shapiro.test</span>(modelo_lineal<span class="op">$</span>residuals)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>prueba_norm</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  modelo_lineal$residuals
+## W = 0.95102, p-value = 0.506</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">ifelse</span>(prueba_norm<span class="op">$</span>p.value<span class="op">&lt;</span><span class="fl">0.05</span>, <span class="st">&quot;Se rechaza Ho&quot;</span>,<span class="st">&quot;No rechazo Ho&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;No rechazo Ho&quot;</code></pre>
+</div>
+<div id="homogeneidad-de-varianzas" class="section level4">
+<h4>Homogeneidad de Varianzas</h4>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>prueba_var&lt;-<span class="kw">bartlett.test</span>(modelo_lineal<span class="op">$</span>residuals,datos_tension<span class="op">$</span>Mat_Aporte)</span>
+<span id="cb21-2"><a href="#cb21-2"></a></span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="kw">ifelse</span>(prueba_var<span class="op">$</span>p.value<span class="op">&lt;</span><span class="fl">0.05</span>, <span class="st">&quot;Rechazo Ho&quot;</span>, <span class="st">&quot;No rechazo Ho&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Rechazo Ho&quot;</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">leveneTest</span>(datos_tension<span class="op">$</span>Esfuerzo<span class="op">~</span>datos_tension<span class="op">$</span>Mat_Aporte<span class="op">*</span>datos_tension<span class="op">$</span>Electrodo)</span></code></pre></div>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##       Df F value   Pr(&gt;F)   
+## group  3  8.0857 0.003261 **
+##       12                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="independencia-de-los-residuales" class="section level4">
+<h4>Independencia de los residuales</h4>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">plot</span>(<span class="kw">rstandard</span>(modelo_lineal), </span>
+<span id="cb25-2"><a href="#cb25-2"></a>     <span class="dt">main=</span><span class="st">&quot;Gráfica de residuos estándar&quot;</span>,</span>
+<span id="cb25-3"><a href="#cb25-3"></a>     <span class="dt">xlab=</span><span class="st">&quot;Observación&quot;, ylab=&quot;</span>Residuos estandarizados<span class="st">&quot;)</span></span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 </div>
 </div>
 </div>
