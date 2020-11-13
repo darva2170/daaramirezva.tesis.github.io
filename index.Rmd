@@ -198,7 +198,7 @@ with(datos_tension2, {
                                      xlab="Material aporte", 
                                      ylab="Resistencia media del tratamiento (MPa)", 
                                      col=c(3:8),
-                   pch=c(19, 17, 15),
+                                     pch=c(19, 17, 15),
                                      trace.label = "Electrodo",
                                      xpd = FALSE)
 
@@ -213,7 +213,7 @@ with(datos_tension2, {
                                      xlab="Electrodo no consumible", 
                                      ylab="Resistencia media del tratamiento (MPa)", 
                                      col=c(1:3),
-                   pch=c(19, 17, 15),
+                                     pch=c(19, 17, 15),
                                      trace.label = "Material de aporte",
                                      xpd = FALSE)})
 
