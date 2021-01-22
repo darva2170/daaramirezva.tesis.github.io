@@ -409,8 +409,8 @@ $(document).ready(function () {
 <p>Con los paquetes de liberías necesarios ya cargados, procedemos a importar los datos del experimiento. Estos datos se pueden también crear de forma manual como vectores y al final concatenar todo en un respectivo dataframe. Sin importar el método de creación del dataframe, se debe asegurar que quede categorizado así, para ello se hacen ciertas comprobaciones.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>datos_tension &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;Datos_tensión.xlsx&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(datos_tension)</span></code></pre></div>
-<div id="htmlwidget-c4c86f9a79ac7db74857" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c4c86f9a79ac7db74857">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],[119.847965403044,203.058657062759,208.106274839137,170.450922917897,133.718313118812,149.510856885432,244.411747951229,169.308099789505,142.904523648649,108.492510121457,54.3525295640198,55.2960060160428,98.7161182872254,146.446130111977,101.196159113546,204.370836364959],["Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte"],["P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta","P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta"],["I","I","II","II","I","I","II","II","I","I","II","II","I","I","II","II"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Esfuerzo<\/th>\n      <th>Mat_Aporte<\/th>\n      <th>Electrodo<\/th>\n      <th>Repeat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a3f1664522574e45b179" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a3f1664522574e45b179">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],[119.847965403044,203.058657062759,208.106274839137,170.450922917897,133.718313118812,149.510856885432,244.411747951229,169.308099789505,142.904523648649,108.492510121457,54.3525295640198,55.2960060160428,98.7161182872254,146.446130111977,101.196159113546,204.370836364959],["Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte"],["P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta","P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta"],["I","I","II","II","I","I","II","II","I","I","II","II","I","I","II","II"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Esfuerzo<\/th>\n      <th>Mat_Aporte<\/th>\n      <th>Electrodo<\/th>\n      <th>Repeat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <p>En caso de que el dataframe no haya considerado los respectivos factores como tal, es necesario hacer la transformación de las categorías.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>datos_tension<span class="op">$</span>Mat_Aporte&lt;-<span class="st"> </span><span class="kw">as.factor</span>(datos_tension<span class="op">$</span>Mat_Aporte)</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
@@ -508,8 +508,8 @@ $(document).ready(function () {
 </table>
 </center>
 <p><br/><br/> Como herramienta adicional para entender la naturaleza del experimento, se presenta el siguiente diagrama de árbol, en el cual se evidencia el concepto de factorial completo, es decir, todos los niveles del segundo factor son igualmente probado en todos los niveles del primer factor.</p>
-<div id="htmlwidget-8a6b7b32ad23964a6234" style="width:672px;height:480px;" class="collapsibleTree html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8a6b7b32ad23964a6234">{"x":{"data":{"name":"datos_tension","children":[{"name":"Con_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]},{"name":"Sin_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]}]},"options":{"hierarchy":["Mat_Aporte","Electrodo"],"input":null,"attribute":"leafCount","linkLength":null,"fontSize":10,"tooltip":false,"collapsed":true,"zoomable":true,"margin":{"top":20,"bottom":20,"left":90,"right":70},"fill":"lightsteelblue"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-65ecd7ab1e7b0c07417c" style="width:672px;height:480px;" class="collapsibleTree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-65ecd7ab1e7b0c07417c">{"x":{"data":{"name":"datos_tension","children":[{"name":"Con_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]},{"name":"Sin_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]}]},"options":{"hierarchy":["Mat_Aporte","Electrodo"],"input":null,"attribute":"leafCount","linkLength":null,"fontSize":10,"tooltip":false,"collapsed":true,"zoomable":true,"margin":{"top":20,"bottom":20,"left":90,"right":70},"fill":"lightsteelblue"}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="análisis-del-experimento" class="section level2">
 <h2>Análisis del experimento</h2>
@@ -1210,7 +1210,7 @@ $(document).ready(function () {
 <td align="center">1</td>
 <td align="center">14801</td>
 <td align="center">7.066</td>
-<td align="center">0.0232</td>
+<td align="center">0.0242</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Electrodo</strong></td>
@@ -1226,7 +1226,7 @@ $(document).ready(function () {
 <td align="center">1</td>
 <td align="center">2357</td>
 <td align="center">1.125</td>
-<td align="center">0.3029</td>
+<td align="center">0.3063</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Residuals</strong></td>
@@ -1241,6 +1241,10 @@ $(document).ready(function () {
 </center>
 <p>Se evidencia que no hay mejora en los resultados y se sigue considerando como efecto únicamente el debido al factor A (material de aporte).</p>
 </div>
+</div>
+<div id="bibliografía" class="section level2">
+<h2>Bibliografía</h2>
+<p>Christensen, R. et al. (2016) Analysis of Variance, Design, and Regression - Linear Modeling for Unbalanced Data. Second. Albuquerque, USA: CRC Press.<br/><br/> Dean, A., Voss, D. y Dragulic, D. (2012) Design and Analysis of Experiments. Second, Springer Texts in Statistics. Second. Springer. doi: 10.1002/9781118147634.<br/><br/> Lawson, J. (2015) Design and Analysis of Experiments with R. Utah, USA: CRC Press.<br/><br/> Montgomery, D. C. (2012) Design and Analysis of Experiments. Eighth. Arizona: John Wiley &amp; Sons, Inc.</p>
 </div>
 
 

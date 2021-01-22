@@ -454,3 +454,11 @@ perm<- perm.anova(Esfuerzo~Mat_Aporte*Electrodo, data = datos_tension, nperm=500
  <center>`r pander(perm)`</center>
  
  Se evidencia que no hay mejora en los resultados y se sigue considerando como efecto únicamente el debido al factor A (material de aporte).
+ 
+## Bibliografía
+ 
+Christensen, R. et al. (2016) Analysis of Variance, Design, and Regression - Linear Modeling for Unbalanced Data. Second. Albuquerque, USA: CRC Press.<br/><br/>
+Dean, A., Voss, D. y Dragulic, D. (2012) Design and Analysis of Experiments. Second, Springer Texts in Statistics. Second. Springer. doi: 10.1002/9781118147634.<br/><br/>
+Lawson, J. (2015) Design and Analysis of Experiments with R. Utah, USA: CRC Press.<br/><br/> 
+Montgomery, D. C. (2012) Design and Analysis of Experiments. Eighth. Arizona: John Wiley & Sons, Inc.
+
