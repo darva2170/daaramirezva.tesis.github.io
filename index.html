@@ -409,8 +409,8 @@ $(document).ready(function () {
 <p>Con los paquetes de liberías necesarios ya cargados, procedemos a importar los datos del experimiento. Estos datos se pueden también crear de forma manual como vectores y al final concatenar todo en un respectivo dataframe. Sin importar el método de creación del dataframe, se debe asegurar que quede categorizado así, para ello se hacen ciertas comprobaciones.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>datos_tension &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;Datos_tensión.xlsx&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(datos_tension)</span></code></pre></div>
-<div id="htmlwidget-a3f1664522574e45b179" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a3f1664522574e45b179">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],[119.847965403044,203.058657062759,208.106274839137,170.450922917897,133.718313118812,149.510856885432,244.411747951229,169.308099789505,142.904523648649,108.492510121457,54.3525295640198,55.2960060160428,98.7161182872254,146.446130111977,101.196159113546,204.370836364959],["Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte"],["P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta","P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta"],["I","I","II","II","I","I","II","II","I","I","II","II","I","I","II","II"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Esfuerzo<\/th>\n      <th>Mat_Aporte<\/th>\n      <th>Electrodo<\/th>\n      <th>Repeat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8cc824b2eb05a4fa2ea5" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8cc824b2eb05a4fa2ea5">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],[115.846869715333,199.057051568978,204.502831070212,167.095575531601,129.507783415842,145.501470623103,240.901873875675,166.097207264539,138.881650337838,104.492481203008,50.851287637728,52.0840085466004,94.6128203824247,142.37455026777,97.7946588645418,200.869814100699],["Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Con_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte","Sin_Aporte"],["P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta","P_verde","P_verde","P_verde","P_verde","P_Violeta","P_Violeta","P_Violeta","P_Violeta"],["I","I","II","II","I","I","II","II","I","I","II","II","I","I","II","II"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Esfuerzo<\/th>\n      <th>Mat_Aporte<\/th>\n      <th>Electrodo<\/th>\n      <th>Repeat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <p>En caso de que el dataframe no haya considerado los respectivos factores como tal, es necesario hacer la transformación de las categorías.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>datos_tension<span class="op">$</span>Mat_Aporte&lt;-<span class="st"> </span><span class="kw">as.factor</span>(datos_tension<span class="op">$</span>Mat_Aporte)</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
@@ -418,7 +418,7 @@ $(document).ready(function () {
 <p>Con el comando <em>str</em> veriicamos la naturaleza tanto de los factores como de la respuesta, esto se hace con el objetivo de evitar problemas al momento de ejecutar los modelos de regresión. Se puede observar como el esfuerzo, que es la variable respuesta, tiene categoría numérica y Material de Aporte y Electrodo tienen categoría factorial. Generalmente las réplicas no se incluyen en el dataframe, pero esta vez se realizó para demostrar que es un diseño balanceado.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">str</span>(datos_tension)</span></code></pre></div>
 <pre><code>## tibble [16 x 4] (S3: tbl_df/tbl/data.frame)
-##  $ Esfuerzo  : num [1:16] 120 203 208 170 134 ...
+##  $ Esfuerzo  : num [1:16] 116 199 205 167 130 ...
 ##  $ Mat_Aporte: Factor w/ 2 levels &quot;Con_Aporte&quot;,&quot;Sin_Aporte&quot;: 1 1 1 1 1 1 1 1 2 2 ...
 ##  $ Electrodo : Factor w/ 2 levels &quot;P_verde&quot;,&quot;P_Violeta&quot;: 1 1 1 1 2 2 2 2 1 1 ...
 ##  $ Repeat    : chr [1:16] &quot;I&quot; &quot;I&quot; &quot;II&quot; &quot;II&quot; ...</code></pre>
@@ -508,8 +508,8 @@ $(document).ready(function () {
 </table>
 </center>
 <p><br/><br/> Como herramienta adicional para entender la naturaleza del experimento, se presenta el siguiente diagrama de árbol, en el cual se evidencia el concepto de factorial completo, es decir, todos los niveles del segundo factor son igualmente probado en todos los niveles del primer factor.</p>
-<div id="htmlwidget-65ecd7ab1e7b0c07417c" style="width:672px;height:480px;" class="collapsibleTree html-widget"></div>
-<script type="application/json" data-for="htmlwidget-65ecd7ab1e7b0c07417c">{"x":{"data":{"name":"datos_tension","children":[{"name":"Con_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]},{"name":"Sin_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]}]},"options":{"hierarchy":["Mat_Aporte","Electrodo"],"input":null,"attribute":"leafCount","linkLength":null,"fontSize":10,"tooltip":false,"collapsed":true,"zoomable":true,"margin":{"top":20,"bottom":20,"left":90,"right":70},"fill":"lightsteelblue"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-7962239ff773d9525ae7" style="width:672px;height:480px;" class="collapsibleTree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7962239ff773d9525ae7">{"x":{"data":{"name":"datos_tension","children":[{"name":"Con_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]},{"name":"Sin_Aporte","children":[{"name":"P_verde"},{"name":"P_Violeta"}]}]},"options":{"hierarchy":["Mat_Aporte","Electrodo"],"input":null,"attribute":"leafCount","linkLength":null,"fontSize":10,"tooltip":false,"collapsed":true,"zoomable":true,"margin":{"top":20,"bottom":20,"left":90,"right":70},"fill":"lightsteelblue"}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="análisis-del-experimento" class="section level2">
 <h2>Análisis del experimento</h2>
@@ -533,8 +533,8 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">174.8</td>
-<td align="center">114</td>
+<td align="center">171.1</td>
+<td align="center">110.2</td>
 </tr>
 </tbody>
 </table>
@@ -554,8 +554,8 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">132.8</td>
-<td align="center">156</td>
+<td align="center">129.1</td>
+<td align="center">152.2</td>
 </tr>
 </tbody>
 </table>
@@ -578,13 +578,13 @@ $(document).ready(function () {
 <tbody>
 <tr class="odd">
 <td align="center"><strong>Con_Aporte</strong></td>
-<td align="center">175.4</td>
-<td align="center">174.2</td>
+<td align="center">171.6</td>
+<td align="center">170.5</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Sin_Aporte</strong></td>
-<td align="center">90.26</td>
-<td align="center">137.7</td>
+<td align="center">86.58</td>
+<td align="center">133.9</td>
 </tr>
 </tbody>
 </table>
@@ -731,32 +731,32 @@ $(document).ready(function () {
 <tr class="odd">
 <td align="center"><strong>Mat_Aporte</strong></td>
 <td align="center">1</td>
-<td align="center">14801</td>
-<td align="center">14801</td>
-<td align="center">7.066</td>
-<td align="center">0.02086</td>
+<td align="center">14796</td>
+<td align="center">14796</td>
+<td align="center">7.053</td>
+<td align="center">0.02095</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Electrodo</strong></td>
 <td align="center">1</td>
-<td align="center">2143</td>
-<td align="center">2143</td>
-<td align="center">1.023</td>
-<td align="center">0.3318</td>
+<td align="center">2136</td>
+<td align="center">2136</td>
+<td align="center">1.018</td>
+<td align="center">0.3329</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>Mat_Aporte:Electrodo</strong></td>
 <td align="center">1</td>
-<td align="center">2357</td>
-<td align="center">2357</td>
-<td align="center">1.125</td>
-<td align="center">0.3097</td>
+<td align="center">2348</td>
+<td align="center">2348</td>
+<td align="center">1.119</td>
+<td align="center">0.3109</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Residuals</strong></td>
 <td align="center">12</td>
-<td align="center">25137</td>
-<td align="center">2095</td>
+<td align="center">25173</td>
+<td align="center">2098</td>
 <td align="center">NA</td>
 <td align="center">NA</td>
 </tr>
@@ -771,23 +771,23 @@ $(document).ready(function () {
 <pre><code>## Tables of means
 ## Grand mean
 ##          
-## 144.3867 
+## 140.6545 
 ## 
 ##  Mat_Aporte 
 ## Mat_Aporte
 ## Con_Aporte Sin_Aporte 
-##     174.80     113.97 
+##     171.06     110.25 
 ## 
 ##  Electrodo 
 ## Electrodo
 ##   P_verde P_Violeta 
-##    132.81    155.96 
+##    129.10    152.21 
 ## 
 ##  Mat_Aporte:Electrodo 
 ##             Electrodo
 ## Mat_Aporte   P_verde P_Violeta
-##   Con_Aporte 175.37  174.24   
-##   Sin_Aporte  90.26  137.68</code></pre>
+##   Con_Aporte 171.63  170.50   
+##   Sin_Aporte  86.58  133.91</code></pre>
 <p>Con el modelo de anova también se pueden extraer los efectos principales de cada nivel de los respectivos factores.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">model.tables</span>(<span class="kw">aov</span>(modelo_lineal), <span class="st">&quot;effects&quot;</span>)</span></code></pre></div>
 <pre><code>## Tables of effects
@@ -795,18 +795,18 @@ $(document).ready(function () {
 ##  Mat_Aporte 
 ## Mat_Aporte
 ## Con_Aporte Sin_Aporte 
-##     30.415    -30.415 
+##     30.409    -30.409 
 ## 
 ##  Electrodo 
 ## Electrodo
 ##   P_verde P_Violeta 
-##   -11.573    11.573 
+##   -11.553    11.553 
 ## 
 ##  Mat_Aporte:Electrodo 
 ##             Electrodo
 ## Mat_Aporte   P_verde P_Violeta
-##   Con_Aporte  12.137 -12.137  
-##   Sin_Aporte -12.137  12.137</code></pre>
+##   Con_Aporte  12.115 -12.115  
+##   Sin_Aporte -12.115  12.115</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">plot.design</span>(Esfuerzo<span class="op">~</span>Mat_Aporte<span class="op">+</span>Electrodo, <span class="dt">fun=</span><span class="st">&quot;mean&quot;</span>, <span class="dt">data=</span>datos_tension, <span class="dt">main=</span><span class="st">&quot; Gráfica de efectos principales&quot;</span>, <span class="dt">ylab=</span> <span class="st">&quot;Resistencia a la tracción&quot;, xlab=&quot;</span>Factores<span class="st">&quot;)</span></span></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>Podemos llevar a cabo una prueba de comparación múltiple para seleccionar el mejor nivel del tratamiento, sin embargo, en nuestro caso particular que es solamente 2 niveles, con simple observación podemos sacar la conclusión.</p>
@@ -817,8 +817,8 @@ $(document).ready(function () {
 ## Fit: aov(formula = modelo_lineal)
 ## 
 ## $Mat_Aporte
-##                            diff       lwr      upr     p adj
-## Sin_Aporte-Con_Aporte -60.82975 -110.6898 -10.9697 0.0208617</code></pre>
+##                            diff       lwr       upr     p adj
+## Sin_Aporte-Con_Aporte -60.81867 -110.7148 -10.92259 0.0209545</code></pre>
 </div>
 <div id="modelo-de-regresión-lineal" class="section level3">
 <h3>Modelo de regresión lineal</h3>
@@ -833,14 +833,14 @@ $(document).ready(function () {
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -55.518 -36.053  -4.922  28.955  70.174 
+## -55.779 -35.824  -4.467  28.793  70.400 
 ## 
 ## Coefficients:
 ##                                         Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                              175.366     22.884   7.663 5.82e-06
-## Mat_AporteSin_Aporte                     -85.105     32.363  -2.630    0.022
-## ElectrodoP_Violeta                        -1.129     32.363  -0.035    0.973
-## Mat_AporteSin_Aporte:ElectrodoP_Violeta   48.550     45.768   1.061    0.310
+## (Intercept)                              171.626     22.901   7.494 7.29e-06
+## Mat_AporteSin_Aporte                     -85.048     32.386  -2.626   0.0221
+## ElectrodoP_Violeta                        -1.123     32.386  -0.035   0.9729
+## Mat_AporteSin_Aporte:ElectrodoP_Violeta   48.459     45.801   1.058   0.3109
 ##                                            
 ## (Intercept)                             ***
 ## Mat_AporteSin_Aporte                    *  
@@ -849,9 +849,9 @@ $(document).ready(function () {
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 45.77 on 12 degrees of freedom
-## Multiple R-squared:  0.4343, Adjusted R-squared:  0.2929 
-## F-statistic: 3.071 on 3 and 12 DF,  p-value: 0.0688</code></pre>
+## Residual standard error: 45.8 on 12 degrees of freedom
+## Multiple R-squared:  0.4337, Adjusted R-squared:  0.2921 
+## F-statistic: 3.064 on 3 and 12 DF,  p-value: 0.06923</code></pre>
 <p>También, se determinan los intervalos de confianza de los coeficientes del modelo de regresión lineal.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>int_conf=<span class="kw">confint</span>(modelo_lineal)</span></code></pre></div>
 <center>
@@ -871,22 +871,22 @@ $(document).ready(function () {
 <tbody>
 <tr class="odd">
 <td align="center"><strong>(Intercept)</strong></td>
-<td align="center">125.5</td>
-<td align="center">225.2</td>
+<td align="center">121.7</td>
+<td align="center">221.5</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Mat_AporteSin_Aporte</strong></td>
 <td align="center">-155.6</td>
-<td align="center">-14.59</td>
+<td align="center">-14.48</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>ElectrodoP_Violeta</strong></td>
-<td align="center">-71.64</td>
-<td align="center">69.38</td>
+<td align="center">-71.69</td>
+<td align="center">69.44</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Mat_AporteSin_Aporte:ElectrodoP_Violeta</strong></td>
-<td align="center">-51.17</td>
+<td align="center">-51.33</td>
 <td align="center">148.3</td>
 </tr>
 </tbody>
@@ -926,8 +926,8 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">0.9177</td>
-<td align="center">0.155</td>
+<td align="center">0.92</td>
+<td align="center">0.1689</td>
 </tr>
 </tbody>
 </table>
@@ -956,9 +956,9 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">0.1471</td>
+<td align="center">0.1562</td>
 <td align="center">3</td>
-<td align="center">0.9856</td>
+<td align="center">0.9843</td>
 </tr>
 </tbody>
 </table>
@@ -1206,33 +1206,33 @@ $(document).ready(function () {
 <tbody>
 <tr class="odd">
 <td align="center"><strong>Mat_Aporte</strong></td>
-<td align="center">14801</td>
+<td align="center">14796</td>
 <td align="center">1</td>
-<td align="center">14801</td>
-<td align="center">7.066</td>
-<td align="center">0.0242</td>
+<td align="center">14796</td>
+<td align="center">7.053</td>
+<td align="center">0.0214</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Electrodo</strong></td>
-<td align="center">2143</td>
+<td align="center">2136</td>
 <td align="center">1</td>
-<td align="center">2143</td>
-<td align="center">1.023</td>
+<td align="center">2136</td>
+<td align="center">1.018</td>
 <td align="center">0.3299</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>Mat_Aporte:Electrodo</strong></td>
-<td align="center">2357</td>
+<td align="center">2348</td>
 <td align="center">1</td>
-<td align="center">2357</td>
-<td align="center">1.125</td>
-<td align="center">0.3063</td>
+<td align="center">2348</td>
+<td align="center">1.119</td>
+<td align="center">0.3083</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Residuals</strong></td>
-<td align="center">25137</td>
+<td align="center">25173</td>
 <td align="center">12</td>
-<td align="center">2095</td>
+<td align="center">2098</td>
 <td align="center">NA</td>
 <td align="center">NA</td>
 </tr>
